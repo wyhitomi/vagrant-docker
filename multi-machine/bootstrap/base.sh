@@ -15,4 +15,5 @@ apt-get install -y \
     libevent-dev \
     bsdmainutils \
     libboost-all-dev \
-    git
+    git \
+    libdb++-dev

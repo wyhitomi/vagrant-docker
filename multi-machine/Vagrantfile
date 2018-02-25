@@ -28,7 +28,7 @@ Vagrant.configure("2") do |config|
       end
       node1.vm.provision :shell, path: "bootstrap/base.sh"
       node1.vm.provision :shell, path: "bootstrap/docker.sh"
-      node1.vm.provision :shell, path: "bootstrap/bdb4.sh"
+      # node1.vm.provision :shell, path: "bootstrap/bdb4.sh"
     end
   
     config.vm.define "node2" do |node2|
@@ -47,7 +47,7 @@ Vagrant.configure("2") do |config|
       end
       node2.vm.provision :shell, path: "bootstrap/base.sh"
       node2.vm.provision :shell, path: "bootstrap/docker.sh"
-      node2.vm.provision :shell, path: "bootstrap/bdb4.sh"
+      # node2.vm.provision :shell, path: "bootstrap/bdb4.sh"
     end
   
   end
