@@ -1,0 +1,51 @@
+# -*- mode: ruby -*-
+# # vi: set ft=ruby :
+
+require 'fileutils'
+require 'open-uri'
+require 'tempfile'
+require 'yaml'
+
+Vagrant.require_version ">= 1.6.0"
+
+$cpu_count = 3
+$vm_memory = 4096
+
+Vagrant.configure("2") do |config|
+    config.vm.define "node1" do |node1|
+      node1.vm.box = "ubuntu/xenial64"
+      node1.vm.hostname = "olenode1"
+      node1.vm.box_url = "ubuntu/xenial64"
+  
+      node1.vm.network :private_network, ip: "192.168.56.101"
+      node1.vm.network :forwarded_port, guest: 22, host: 10122, id: "ssh"
+    
+      node1.vm.provider :virtualbox do |v|
+        v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        v.customize ["modifyvm", :id, "--memory", $vm_memory]
+        v.customize ["modifyvm", :id, "--name", "olenode1"]
+        v.cpus = $cpu_count
+      end
+      node1.vm.provision :shell, path: "bootstrap/base.sh"
+      node1.vm.provision :shell, path: "bootstrap/docker.sh"
+    end
+  
+    config.vm.define "node2" do |node2|
+      node2.vm.box = "ubuntu/xenial64"
+      node2.vm.hostname = 'olenode2'
+      node2.vm.box_url = "ubuntu/xenial64"
+  
+      node2.vm.network :private_network, ip: "192.168.56.102"
+      node2.vm.network :forwarded_port, guest: 22, host: 10222, id: "ssh"
+  
+      node2.vm.provider :virtualbox do |v|
+        v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+        v.customize ["modifyvm", :id, "--memory", $vm_memory]
+        v.customize ["modifyvm", :id, "--name", "olenode2"]
+        v.cpus = $cpu_count
+      end
+      node2.vm.provision :shell, path: "bootstrap/base.sh"
+      node2.vm.provision :shell, path: "bootstrap/docker.sh"
+    end
+  
+  end
