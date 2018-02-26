@@ -1,6 +1,7 @@
 #!/usr/bin/env bash
 
 export BDB_PREFIX="/usr/local/db4"
+echo "export BDB_PREFIX=\"/usr/local/db4\"" >> /root/.bashrc
 mkdir ${BDB_PREFIX}
 cd ${BDB_PREFIX}
 
