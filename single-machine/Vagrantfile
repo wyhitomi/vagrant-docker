@@ -12,20 +12,17 @@ $cpu_count = 2
 $vm_memory = 4096
 
 Vagrant.configure("2") do |config|
-  config.vm.box = "ubuntu/xenial64"
-  config.vm.hostname = "xenial-box"
-  config.vm.network "public_network",
-    use_dhcp_assigned_default_route: true
+  config.vm.box = "debian/stretch64"
+  config.vm.hostname = "vagrant-box.local"
+  config.vm.network :private_network, ip: "192.168.56.101"
+  config.vm.network :forwarded_port, guest: 22, host: 10122, id: "ssh"
 
-  config.vm.provider :virtualbox do |vb|
-    vb.gui = false
+  config.vm.provider :virtualbox do |v|
     # vb.name = ubuntu
-    vb.customize [
-      "modifyvm", :id,
-      "--cpuexecutioncap", "50",
-    ]
-    vb.memory = $vm_memory
-    vb.cpus = $cpu_count
+    v.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
+    v.customize ["modifyvm", :id, "--memory", $vm_memory]
+    v.customize ["modifyvm", :id, "--name", "vagrant-box.local"]
+    v.cpus = $cpu_count
   end
 
   config.vm.provision "shell", path: "provision/setup.sh"
